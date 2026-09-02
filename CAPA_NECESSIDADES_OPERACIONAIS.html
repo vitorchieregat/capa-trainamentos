@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CAPA — Ações Operacionais | Agentes e Técnicos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#EFF1F0;
+    --surface:#FFFFFF;
+    --tint1:#E8F1EC;
+    --tint2:#DCEDE3;
+    --green-dark:#0C4C3B;
+    --green:#0C6D4C;
+    --mint:#238C61;
+    --text:#142420;
+    --text-muted:#55665F;
+    --amber:#B9762E;
+    --amber-bg:#F6EADA;
+    --rust:#A8442E;
+    --rust-bg:#F5E1DB;
+    --line:#D5DED9;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'IBM Plex Sans',sans-serif;
+    font-size:16px;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.num,.stat-num{font-family:'Space Grotesk',sans-serif;}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 32px;}
+
+  /* HERO */
+  .hero{
+    background:linear-gradient(160deg,var(--green-dark) 0%, #0A3E30 100%);
+    color:#F2F6F3;
+    padding:56px 0 40px;
+  }
+  .hero .eyebrow{color:#9FCBB5;font-size:13px;letter-spacing:.02em;margin:0 0 14px;}
+  .hero h1{font-size:34px;font-weight:600;line-height:1.2;margin:0 0 10px;max-width:680px;}
+  .hero p.sub{color:#C9DED4;font-size:16px;max-width:700px;margin:0 0 36px;}
+  .kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,0.14);border-radius:10px;overflow:hidden;}
+  .kpi{background:rgba(255,255,255,0.04);padding:20px 22px;}
+  .kpi .stat-num{font-size:32px;font-weight:600;color:#fff;display:block;}
+  .kpi .stat-label{font-size:13px;color:#B9D4C7;margin-top:4px;display:block;}
+
+  section{padding:52px 0;}
+  section.alt{background:var(--surface);}
+  h2.section-title{font-size:22px;font-weight:600;color:var(--green-dark);margin:0 0 6px;}
+  p.section-desc{color:var(--text-muted);font-size:14.5px;max-width:640px;margin:0 0 30px;}
+
+  /* NEEDS RANKING */
+  .need-row{
+    display:grid;
+    grid-template-columns:270px 1fr 130px 60px;
+    align-items:center;
+    gap:16px;
+    padding:14px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .need-row:first-child{border-top:1px solid var(--line);}
+  .need-name{font-size:14.5px;font-weight:500;color:var(--text);}
+  .need-states{font-size:12px;color:var(--text-muted);margin-top:3px;}
+  .bar-track{background:var(--tint1);border-radius:5px;height:10px;overflow:hidden;}
+  .bar-fill{height:100%;background:linear-gradient(90deg,var(--mint),var(--green));border-radius:5px;}
+  .need-count{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:18px;color:var(--green-dark);text-align:right;}
+  .dept-chip{
+    display:inline-block;
+    font-size:11.5px;
+    font-weight:500;
+    color:var(--green-dark);
+    background:var(--tint2);
+    border:1px solid var(--mint);
+    border-radius:20px;
+    padding:4px 7px;
+    text-align:center;
+    white-space:nowrap;
+  }
+
+  /* STRUCTURAL AUDIT */
+  .audit-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 32px;}
+  .audit-item{padding:12px 0;border-bottom:1px solid var(--line);}
+  .audit-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;}
+  .audit-label{font-size:14px;color:var(--text);}
+  .audit-pct{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:15px;color:var(--rust);}
+  .audit-bar-track{background:var(--tint1);height:7px;border-radius:4px;overflow:hidden;}
+  .audit-bar-fill{height:100%;background:var(--amber);border-radius:4px;}
+  .audit-note{font-size:12.5px;color:var(--text-muted);margin-top:24px;}
+
+  /* STATES GRID */
+  .uf-grid{display:flex;flex-wrap:wrap;gap:10px;}
+  .uf-chip{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 14px;min-width:64px;text-align:center;}
+  .uf-chip .uf-code{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:15px;color:var(--green-dark);}
+  .uf-chip .uf-n{font-size:11.5px;color:var(--text-muted);margin-top:2px;}
+  .uf-chip.high{background:var(--tint2);border-color:var(--mint);}
+
+  /* ACTION PLAN */
+  .action-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  .action-card{
+    background:var(--tint1);
+    border-radius:10px;
+    padding:22px 24px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .action-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;}
+  .action-title{font-size:15px;font-weight:600;color:var(--green-dark);}
+  .action-status{
+    font-size:11px;
+    font-weight:600;
+    padding:4px 9px;
+    border-radius:20px;
+    white-space:nowrap;
+    background:var(--amber-bg);
+    color:var(--amber);
+  }
+  .action-status.done{background:var(--tint2);color:var(--green);}
+  .action-status.pending{background:var(--rust-bg);color:var(--rust);}
+  .action-desc{font-size:13.5px;color:var(--text);line-height:1.5;}
+  .action-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;}
+  .meta-chip{
+    font-size:11px;
+    font-weight:500;
+    padding:4px 10px;
+    border-radius:20px;
+    background:var(--surface);
+    border:1px solid var(--line);
+    color:var(--text-muted);
+  }
+  .meta-chip.dept{border-color:var(--mint);color:var(--green-dark);background:var(--tint2);}
+
+  /* MEETING NOTES */
+  .meeting-card{background:var(--tint1);border-radius:12px;padding:32px 36px;}
+  .meeting-card ul{margin:0;padding:0;list-style:none;}
+  .meeting-card li{padding:12px 0;border-bottom:1px solid rgba(12,77,59,0.12);font-size:14.5px;display:flex;gap:12px;}
+  .meeting-card li:last-child{border-bottom:none;}
+  .meeting-card li .tag{flex:0 0 auto;font-size:11px;font-weight:600;padding:3px 8px;border-radius:20px;background:var(--green);color:#fff;height:fit-content;white-space:nowrap;}
+  .meeting-card li .tag.risk{background:var(--rust);}
+  .meeting-card li .tag.deadline{background:var(--amber);}
+  .meeting-card li .txt{flex:1;}
+  .meeting-card li .txt b{color:var(--green-dark);}
+
+  footer{padding:34px 0 60px;}
+  footer p{font-size:12.5px;color:var(--text-muted);max-width:680px;}
+
+  @media(max-width:720px){
+    .wrap{padding:0 20px;}
+    .kpi-row{grid-template-columns:repeat(2,1fr);}
+    .need-row{grid-template-columns:1fr;gap:6px;}
+    .need-count{text-align:left;}
+    .audit-grid{grid-template-columns:1fr;}
+    .action-grid{grid-template-columns:1fr;}
+    .hero h1{font-size:26px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="wrap">
+    <p class="eyebrow">CAPA -  VTCLOG · AGENTES, TÉCNICAS E FILIAIS</p>
+    <h1>Ações Operacionais</h1>
+    <p class="sub">Levantamento das principais necessidades operacionais identificadas a partir 28/07, das ocorrências registradas, de auditorias das bases e mapeamento operacional.</p>
+    <div class="kpi-row">
+      <div class="kpi"><span class="stat-num">46</span><span class="stat-label">ocorrências registradas</span></div>
+      <div class="kpi"><span class="stat-num">65%</span><span class="stat-label">já resolvidas (30 de 46)</span></div>
+      <div class="kpi"><span class="stat-num">20</span><span class="stat-label">estados com ocorrências</span></div>
+      <div class="kpi"><span class="stat-num">7</span><span class="stat-label">ações abertas em acompanhamento</span></div>
+    </div>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <h2 class="section-title">Relatório Operacional</h2>
+    <p class="section-desc">Temas extraídos das ocorrências relatadas por técnicas e pela auditoria, ordenados pelo número de menções, com o departamento a acionar em cada caso.</p>
+
+    <div class="need-row">
+      <div><div class="need-name">Sincronismo / ARES / Dataloggers</div><div class="need-states">AC · AP · CE · GO · MA · PI · PR · RN · RO · SC · SE (11 estados)</div></div>
+      <div class="bar-track"><div class="bar-fill" style="width:100%"></div></div>
+      <div><span class="dept-chip">Gerenciamento Térmico / TI</span></div>
+      <div class="need-count">17</div>
+    </div>
+    <div class="need-row">
+      <div><div class="need-name">App VTC Entregas (instabilidade e uso)</div><div class="need-states">AC · AL · AP · CE · ES · PB · PR · RJ · RN · RO · SC (11 estados)</div></div>
+      <div class="bar-track"><div class="bar-fill" style="width:82%"></div></div>
+      <div><span class="dept-chip">TI / Sistemas</span></div>
+      <div class="need-count">14</div>
+    </div>
+    <div class="need-row">
+      <div><div class="need-name">Insumos e equipamentos (caixas, cabos, baterias)</div><div class="need-states">AL · CE · ES · GO · MA · MS (6 estados)</div></div>
+      <div class="bar-track"><div class="bar-fill" style="width:47%"></div></div>
+      <div><span class="dept-chip">SAC / Gerenciamento Térmico</span></div>
+      <div class="need-count">8</div>
+    </div>
+    <div class="need-row">
+      <div><div class="need-name">Câmara fria / gelox / maturação térmica</div><div class="need-states">AM · CE · GO · MA · PB · RN (6 estados)</div></div>
+      <div class="bar-track"><div class="bar-fill" style="width:41%"></div></div>
+      <div><span class="dept-chip">Gerenciamento Térmico</span></div>
+      <div class="need-count">7</div>
+    </div>
+    <div class="need-row">
+      <div><div class="need-name">Resistência / relacionamento com agentes de carga</div><div class="need-states">ES · GO · MA · PB · SC · SE (6 estados)</div></div>
+      <div class="bar-track"><div class="bar-fill" style="width:35%"></div></div>
+      <div><span class="dept-chip">Qualidade / Filial</span></div>
+      <div class="need-count">6</div>
+    </div>
+    <div class="need-row">
+      <div><div class="need-name">Motoristas / adesão ao App VTC Entregas</div><div class="need-states">CE · GO · RJ · RS · SC (5 estados)</div></div>
+      <div class="bar-track"><div class="bar-fill" style="width:29%"></div></div>
+      <div><span class="dept-chip">Contrato</span></div>
+      <div class="need-count">5</div>
+    </div>
+    <div class="need-row">
+      <div><div class="need-name">Infraestrutura agentes</div><div class="need-states">GO · SC · SE (3 estados)</div></div>
+      <div class="bar-track"><div class="bar-fill" style="width:18%"></div></div>
+      <div><span class="dept-chip">Filial / Qualidade</span></div>
+      <div class="need-count">3</div>
+    </div>
+    <div class="need-row">
+      <div><div class="need-name">Documentação (ocorrências de entrega)</div><div class="need-states">CE · RS · SC (3 estados)</div></div>
+      <div class="bar-track"><div class="bar-fill" style="width:18%"></div></div>
+      <div><span class="dept-chip">Técnicas de Farmácia / Operação </span></div>
+      <div class="need-count">3</div>
+    </div>
+    <div class="need-row">
+      <div><div class="need-name">Acesso a sistemas/portais (login, perfil, senha)</div><div class="need-states">AP · BA · PA (3 estados)</div></div>
+      <div class="bar-track"><div class="bar-fill" style="width:18%"></div></div>
+      <div><span class="dept-chip">TI</span></div>
+      <div class="need-count">3</div>
+    </div>
+    <div class="need-row">
+      <div><div class="need-name">Comunicação interna</div><div class="need-states">CE · SC (2 estados)</div></div>
+      <div class="bar-track"><div class="bar-fill" style="width:12%"></div></div>
+      <div><span class="dept-chip">PPCP / SAC</span></div>
+      <div class="need-count">2</div>
+    </div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="wrap">
+    <h2 class="section-title">Diagnóstico estrutural das bases</h2>
+    <p class="section-desc">Percentual das 22 bases de agentes auditadas que não atendem cada critério estrutural — a raiz de boa parte das necessidades operacionais acima.</p>
+    <div class="audit-grid">
+      <div class="audit-item">
+        <div class="audit-top"><span class="audit-label">Sem câmara fria</span><span class="audit-pct">86% · 19/22</span></div>
+        <div class="audit-bar-track"><div class="audit-bar-fill" style="width:86%"></div></div>
+      </div>
+      <div class="audit-item">
+        <div class="audit-top"><span class="audit-label">Sem estoque de baterias ARES</span><span class="audit-pct">86% · 19/22</span></div>
+        <div class="audit-bar-track"><div class="audit-bar-fill" style="width:86%"></div></div>
+      </div>
+      <div class="audit-item">
+        <div class="audit-top"><span class="audit-label">Sem orientação p/ troca de bateria ARES</span><span class="audit-pct">77% · 17/22</span></div>
+        <div class="audit-bar-track"><div class="audit-bar-fill" style="width:77%"></div></div>
+      </div>
+      <div class="audit-item">
+        <div class="audit-top"><span class="audit-label">Sem veículo exclusivo VTCLOG</span><span class="audit-pct">73% · 16/22</span></div>
+        <div class="audit-bar-track"><div class="audit-bar-fill" style="width:73%"></div></div>
+      </div>
+      <div class="audit-item">
+        <div class="audit-top"><span class="audit-label">Thermo King fora de funcionamento</span><span class="audit-pct">55% · 12/22</span></div>
+        <div class="audit-bar-track"><div class="audit-bar-fill" style="width:55%"></div></div>
+      </div>
+      <div class="audit-item">
+        <div class="audit-top"><span class="audit-label">Sem Thermo King na base</span><span class="audit-pct">45% · 10/22</span></div>
+        <div class="audit-bar-track"><div class="audit-bar-fill" style="width:45%"></div></div>
+      </div>
+      <div class="audit-item">
+        <div class="audit-top"><span class="audit-label">Caixas de reversa fora de condições de uso</span><span class="audit-pct">41% · 9/22</span></div>
+        <div class="audit-bar-track"><div class="audit-bar-fill" style="width:41%"></div></div>
+      </div>
+      <div class="audit-item">
+        <div class="audit-top"><span class="audit-label">Sem freezer exclusivo VTCLOG</span><span class="audit-pct">36% · 8/22</span></div>
+        <div class="audit-bar-track"><div class="audit-bar-fill" style="width:36%"></div></div>
+      </div>
+    </div>
+    <p class="audit-note">Critérios adicionais com incidência menor: estoque de gelox insuficiente (27%), pistola sem calibração vigente (18%), freezer inadequado para maturação (18%), maturação fora da orientação (18%) e área sem climatização (5%).</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2 class="section-title">Ocorrências por estado</h2>
+    <p class="section-desc">Distribuição das 46 ocorrências entre os 20 estados atendidos no período.</p>
+    <div class="uf-grid">
+      <div class="uf-chip high"><div class="uf-code">CE</div><div class="uf-n">5</div></div>
+      <div class="uf-chip high"><div class="uf-code">SE</div><div class="uf-n">4</div></div>
+      <div class="uf-chip high"><div class="uf-code">SC</div><div class="uf-n">4</div></div>
+      <div class="uf-chip high"><div class="uf-code">GO</div><div class="uf-n">4</div></div>
+      <div class="uf-chip"><div class="uf-code">RN</div><div class="uf-n">3</div></div>
+      <div class="uf-chip"><div class="uf-code">AL</div><div class="uf-n">3</div></div>
+      <div class="uf-chip"><div class="uf-code">ES</div><div class="uf-n">3</div></div>
+      <div class="uf-chip"><div class="uf-code">MA</div><div class="uf-n">3</div></div>
+      <div class="uf-chip"><div class="uf-code">RO</div><div class="uf-n">2</div></div>
+      <div class="uf-chip"><div class="uf-code">AC</div><div class="uf-n">2</div></div>
+      <div class="uf-chip"><div class="uf-code">RJ</div><div class="uf-n">2</div></div>
+      <div class="uf-chip"><div class="uf-code">PB</div><div class="uf-n">2</div></div>
+      <div class="uf-chip"><div class="uf-code">AP</div><div class="uf-n">2</div></div>
+      <div class="uf-chip"><div class="uf-code">PR</div><div class="uf-n">2</div></div>
+      <div class="uf-chip"><div class="uf-code">AM</div><div class="uf-n">1</div></div>
+      <div class="uf-chip"><div class="uf-code">PA</div><div class="uf-n">1</div></div>
+      <div class="uf-chip"><div class="uf-code">MS</div><div class="uf-n">1</div></div>
+      <div class="uf-chip"><div class="uf-code">BA</div><div class="uf-n">1</div></div>
+      <div class="uf-chip"><div class="uf-code">RS</div><div class="uf-n">1</div></div>
+      <div class="uf-chip"><div class="uf-code">PI</div><div class="uf-n">1</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="wrap">
+    <h2 class="section-title">Plano de ação e departamentos acionados</h2>
+    <p class="section-desc">Ações concretas em andamento a partir dos assuntos discutidos, cada uma com o departamento responsável por tocar a solução.</p>
+    <div class="action-grid">
+
+      <div class="action-card">
+        <div class="action-head"><span class="action-title">Lista de contatos por UF</span><span class="action-status">Imediato · Manual</span></div>
+        <div class="action-desc">Mapear e consolidar e-mails de agentes e técnicas operacionais por UF, para envio direto das pautas de entrega.</div>
+        <div class="action-meta"><span class="meta-chip dept">PPCP</span></div>
+      </div>
+
+      <div class="action-card">
+        <div class="action-head"><span class="action-title">Disparo prévio de agendamento</span><span class="action-status">Em andamento</span></div>
+        <div class="action-desc">Enviar e-mail com a volumetria/pauta a agentes e técnicas assim que o agendamento for confirmado com o Estado, para cargas perecíveis/rotina.</div>
+        <div class="action-meta"><span class="meta-chip dept">PPCP</span></div>
+      </div>
+
+      <div class="action-card">
+        <div class="action-head"><span class="action-title">Automação de notificação de agendamento</span><span class="action-status">A ser alinhado</span></div>
+        <div class="action-desc">Avaliar no portal o disparo automático do comprovante de confirmação de agendamento para os e-mails de agentes e técnicas.</div>
+        <div class="action-meta"><span class="meta-chip dept">TI</span><span class="meta-chip">Rafael</span></div>
+      </div>
+
+      <div class="action-card">
+        <div class="action-head"><span class="action-title">Registro de consumo de gelo</span><span class="action-status">Em implementação</span></div>
+        <div class="action-desc">Instruir as técnicas a registrar a quantidade de manutenções e de pedras de gelo trocadas por semana, para dar previsibilidade ao estoque.</div>
+        <div class="action-meta"><span class="meta-chip dept">Técnicas de Farmácia / Operação</span></div>
+      </div>
+
+      <div class="action-card">
+        <div class="action-head"><span class="action-title">Acompanhamento de freezers e insumos</span><span class="action-status">Em andamento</span></div>
+        <div class="action-desc">Contatar as Secretarias de Saúde das bases que já receberam freezer (Fortaleza, Sul Log, Goiânia, Aero Neiva, Líder Carga, Triex/FFLN, Boa Vista e CWB) para solicitar disponibilidade de gelo local exclusivo.</div>
+        <div class="action-meta"><span class="meta-chip dept">SAC</span><span class="meta-chip">Daniela</span></div>
+      </div>
+
+      <div class="action-card">
+        <div class="action-head"><span class="action-title">Abastecimento via rodoviário (contingência)</span><span class="action-status">A ser acionado</span></div>
+        <div class="action-desc">Caso a Secretaria local recuse fornecer gelo, organizar o envio de estoque de gelo via transporte rodoviário regular para a base.</div>
+        <div class="action-meta"><span class="meta-chip dept">SAC</span></div>
+      </div>
+
+      <div class="action-card">
+        <div class="action-head"><span class="action-title">Cronograma da câmara fria</span><span class="action-status pending">Aguardando liberação</span></div>
+        <div class="action-desc">Finalizar o alinhamento de custos para liberação do cronograma de instalação da câmara fria e repassar ao campo.</div>
+        <div class="action-meta"><span class="meta-chip dept">Diretoria</span></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="wrap">
+    <h2 class="section-title">Registros da última reunião</h2>
+    <p class="section-desc">Pontos levantados no encontro mais recente da equipe, para acompanhamento junto às necessidades operacionais mapeadas acima.</p>
+    <div class="meeting-card">
+      <ul>
+        <li><span class="tag">Cobertura</span><span class="txt">Faltam técnicas de farmácia alocadas em <b>AC, RO, RR e TO</b>.</span></li>
+        <li><span class="tag">Novo agente</span><span class="txt"><b>RN</b>: sequência definida — inicia com carga seca e depois passa a operar carga refrigerada; a base de <b>Macau</b> foi declinada.</span></li>
+        <li><span class="tag risk">Risco</span><span class="txt"><b>GMB (RS)</b>: dificuldade no relacionamento com o agente — situação considerada um risco.</span></li>
+        <li><span class="tag deadline">Prazo</span><span class="txt">Ações combinadas com prazo para a <b>semana que vem</b>.</span></li>
+        <li><span class="tag">Acompanhar</span><span class="txt">Assuntos prioritários: <b>câmaras frias, gelox, insumos dos agentes, freezer e comunicação</b>.</span></li>
+        <li><span class="tag">Compra</span><span class="txt">Aquisição de <b>leitores de código de barras</b> para os agentes.</span></li>
+        <li><span class="tag">Dados</span><span class="txt"><b>Consolidação dos dados</b> segue como pendência de acompanhamento.</span></li>
+        <li><span class="tag">Evolução</span><span class="txt">O <b>sincronismo</b> vem <b>melhorando desde a chegada das técnicas</b> às bases.</span></li>
+        <li><span class="tag">Acompanhar</span><span class="txt"><b>Coleta dos dataloggers</b> segue como ponto de atenção nas bases.</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>Fonte: planilha "CAPA - Técnicos de Farmácia VTC LOG 2026" (abas Ocorrências e Tratativas, Irregularidades, Temas, Evolução Semanal e Agentes e Técnicos), complementada pelos registros da última reunião e pelos assuntos finais consolidados da equipe. Período de referência: 28/07 a 31/08/2026.</p>
+  </div>
+</footer>
+
+</body>
+</html>
